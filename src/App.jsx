@@ -1,7 +1,11 @@
 import { Component } from "react";
 import { nanoid } from "nanoid";
-
 import "./App.css";
+
+// ! Components
+import ContactForm from "./component/ContactForm/ContactForm";
+import Filter from "./component/Filter/Filter";
+import ContactList from "./component/ContactList/ContactList";
 
 class App extends Component {
   state = {
@@ -50,49 +54,18 @@ class App extends Component {
 
     return (
       <>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name:
-            <input
-              onChange={this.handleInput}
-              value={this.state.name}
-              type="text"
-              name="name"
-              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-              required
-            />
-          </label>
-          <br />
-          <label>
-            Number:
-            <input
-              type="tel"
-              name="number"
-              onChange={this.handleInput}
-              value={this.state.number}
-              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-              required
-            />
-          </label>
-          <button type="submit">Add Contact</button>
-        </form>
-
+        <ContactForm onSubmit={this.handleSubmit} onChange={this.handleInput} number={this.state.number} name={this.state.name}/>
         <h2>Contacts</h2>
-        <ul>
+        {/* <ul>
           {filteredContacts.map(({ id, name, number }) => (
             <li key={id}>
               {name}:{number}
             </li>
           ))}
-        </ul>
-
+        </ul> */}
         <h2>Find contaacts by name</h2>
-        <input
-          type="text"
-          name="filter"
-          value={this.state.filter}
-          onChange={this.handleFilter}
-        />
+        <ContactList filteredContacts={filteredContacts}/>
+        <Filter value={this.state.filter} onChange={this.handleFilter}/>
       </>
     );
   }
