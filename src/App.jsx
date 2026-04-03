@@ -20,6 +20,14 @@ class App extends Component {
     filter: "",
   };
 
+  componentDidMount() {
+    console.log("ура");
+  };
+  
+  componentDidUpdate() {
+    console.log("зміни в стейті");
+  }
+
   handleSubmit = (evt) => {
     evt.preventDefault();
 
