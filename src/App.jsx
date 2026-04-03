@@ -23,10 +23,21 @@ class App extends Component {
   handleSubmit = (evt) => {
     evt.preventDefault();
 
+const {name, number, contacts} = this.state
+    const contactDublicate = contacts.some((contact) => contact.name.toLowerCase() === name.toLowerCase());
+    if (contactDublicate) {
+      alert(`${name} is already in contacts`)
+      this.setState({
+        name: "",
+        number: ""
+   })
+      return
+    }
+
     const newContact = {
       id: nanoid(),
-      name: this.state.name,
-      number: this.state.number,
+      name: name,
+      number: number,
     };
 
     this.setState((prevState) => ({
@@ -44,6 +55,13 @@ class App extends Component {
   handleFilter = (evt) => {
     this.setState({ filter: evt.target.value });
   };
+
+  handleDelete = (id) => {
+    this.setState((prevState) => ({
+      contacts: prevState.contacts.filter((item) => item.id !== id)
+      
+    }));
+  }
 
   render() {
     const normalizedFilter = this.state.filter.toLowerCase();
@@ -64,7 +82,7 @@ class App extends Component {
           ))}
         </ul> */}
         <h2>Find contaacts by name</h2>
-        <ContactList filteredContacts={filteredContacts}/>
+        <ContactList filteredContacts={filteredContacts} onDelete={this.handleDelete } />
         <Filter value={this.state.filter} onChange={this.handleFilter}/>
       </>
     );
