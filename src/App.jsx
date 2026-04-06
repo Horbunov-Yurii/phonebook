@@ -21,25 +21,33 @@ class App extends Component {
   };
 
   componentDidMount() {
-    console.log("ура");
-  };
-  
-  componentDidUpdate() {
-    console.log("зміни в стейті");
+    const data = localStorage.getItem("contacts");
+    if (data) {
+      this.setState({
+        contacts: JSON.parse(data),
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts.length !== this.state.contacts.length) {
+      localStorage.setItem("contacts", JSON.stringify(this.state.contacts));
+    }
   }
 
   handleSubmit = (evt) => {
     evt.preventDefault();
-
-const {name, number, contacts} = this.state
-    const contactDublicate = contacts.some((contact) => contact.name.toLowerCase() === name.toLowerCase());
+    const { name, number, contacts } = this.state;
+    const contactDublicate = contacts.some(
+      (contact) => contact.name.toLowerCase() === name.toLowerCase(),
+    );
     if (contactDublicate) {
-      alert(`${name} is already in contacts`)
+      alert(`${name} is already in contacts`);
       this.setState({
         name: "",
-        number: ""
-   })
-      return
+        number: "",
+      });
+      return;
     }
 
     const newContact = {
@@ -66,10 +74,9 @@ const {name, number, contacts} = this.state
 
   handleDelete = (id) => {
     this.setState((prevState) => ({
-      contacts: prevState.contacts.filter((item) => item.id !== id)
-      
+      contacts: prevState.contacts.filter((item) => item.id !== id),
     }));
-  }
+  };
 
   render() {
     const normalizedFilter = this.state.filter.toLowerCase();
@@ -80,7 +87,12 @@ const {name, number, contacts} = this.state
 
     return (
       <>
-        <ContactForm onSubmit={this.handleSubmit} onChange={this.handleInput} number={this.state.number} name={this.state.name}/>
+        <ContactForm
+          onSubmit={this.handleSubmit}
+          onChange={this.handleInput}
+          number={this.state.number}
+          name={this.state.name}
+        />
         <h2>Contacts</h2>
         {/* <ul>
           {filteredContacts.map(({ id, name, number }) => (
@@ -90,8 +102,11 @@ const {name, number, contacts} = this.state
           ))}
         </ul> */}
         <h2>Find contaacts by name</h2>
-        <ContactList filteredContacts={filteredContacts} onDelete={this.handleDelete } />
-        <Filter value={this.state.filter} onChange={this.handleFilter}/>
+        <ContactList
+          filteredContacts={filteredContacts}
+          onDelete={this.handleDelete}
+        />
+        <Filter value={this.state.filter} onChange={this.handleFilter} />
       </>
     );
   }
